@@ -7,8 +7,8 @@ import (
 
 type User struct {
 	gorm.Model
-	User_ID  uuid.UUID
-	Username string `gorm:"unique"`
+	User_ID  uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
+	Username string    `gorm:"unique"`
 	Password string
 }
 
