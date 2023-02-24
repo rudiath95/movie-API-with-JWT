@@ -7,5 +7,8 @@ func SyncDatabases() {
 		models.User{},
 		models.UserInfo{},
 		models.VoucherList{},
+		models.Director{},
+		models.Genre{},
+		models.Movie{},
 	)
 }

@@ -8,6 +8,3 @@ type VoucherList struct {
 	VoucherAmount uint
 	VoucherStatus bool `gorm:"default:true"`
 }
-
-type VoucherRedeem struct {
-}

@@ -26,8 +26,14 @@ func main() {
 
 	//VOUCHER
 	r.POST("/voucher", middleware.RequiredAuth, controllers.AddVoucher)
-
 	r.PUT("/redeem", middleware.RequiredAuth, controllers.RedeemVoucher)
+
+	//Movie
+	//++Director
+	r.GET("/director", controllers.GetDirector)
+	r.POST("/director", middleware.RequiredAuth, controllers.AddDirector)
+	r.PUT("/director/:id", middleware.RequiredAuth, controllers.UpdateDirector)
+	r.DELETE("/director/:id", middleware.RequiredAuth, controllers.DeleteDirector)
 
 	r.Run()
 }
