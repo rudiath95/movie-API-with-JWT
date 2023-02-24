@@ -6,7 +6,6 @@ func SyncDatabases() {
 	DB.AutoMigrate(
 		models.User{},
 		models.UserInfo{},
-		models.VouceherList{},
-		models.VoucherRedeem{},
+		models.VoucherList{},
 	)
 }

@@ -122,6 +122,7 @@ func UserInfo(c *gin.Context) {
 	user, _ := c.Get("user")
 
 	var body struct {
+		User_ID   int
 		Email     string
 		FirstName string
 		LastName  string
@@ -130,7 +131,7 @@ func UserInfo(c *gin.Context) {
 	c.Bind(&body)
 
 	//Create Query
-	post := models.UserInfo{Email: body.Email, FirstName: body.FirstName, LastName: body.LastName}
+	post := models.UserInfo{User_ID: int(user.(models.User).ID), Email: body.Email, FirstName: body.FirstName, LastName: body.LastName}
 
 	result := ini.DB.Create(&post)
 
@@ -146,7 +147,59 @@ func UserInfo(c *gin.Context) {
 
 	//Return
 	c.JSON(200, gin.H{
-		"user": user,
 		"post": post,
+	})
+}
+
+func UpdateUserInfo(c *gin.Context) {
+	//get id
+	id := c.Param("id")
+
+	//Call DB
+	var body struct {
+		Email     string
+		FirstName string
+		LastName  string
+	}
+
+	c.Bind(&body)
+	var post models.UserInfo
+	ini.DB.Find(&post, id)
+
+	//Update
+	ini.DB.Model(&post).Updates(models.UserInfo{
+		Email:     body.Email,
+		FirstName: body.FirstName,
+		LastName:  body.LastName,
+	})
+
+	//Return
+	c.JSON(200, gin.H{
+		"post": post,
+	})
+}
+
+func ChargeBalance(c *gin.Context) {
+	//get id
+	user, _ := c.Get("user")
+	id := user.(models.User).ID
+
+	//Call DB
+	var body struct {
+		CurrentBalance uint
+	}
+
+	c.Bind(&body)
+	var post models.UserInfo
+	ini.DB.Raw("SELECT current_balance FROM user_infos WHERE user_id = ?", id).Scan(&post)
+	// ini.DB.Find(&post, 2)
+
+	total := post.CurrentBalance + body.CurrentBalance
+	ini.DB.Raw("UPDATE user_infos SET current_balance = ? WHERE user_id = ? ",
+		total, id).Scan(&post)
+
+	//Return
+	c.JSON(200, gin.H{
+		"current_balance": total,
 	})
 }
